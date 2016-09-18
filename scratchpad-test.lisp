@@ -418,13 +418,35 @@
 			     (open-inf-unum *env*))))
       (jointp (%quad dom) (ubound 0))))
   t)
-#+nil
+
 (deftest ch17.test-2d
   (flet ((%quad (x)
 	   (poly
 	    (make-ubarray (vector (ubound 2) (ubound 100) (ubound 3)))
 	    x)))
-    (let* ((*env* (make-env 4 4))
+    (let* ((*env* (make-env 3 2))
+	   (dom (make-ubound (open-inf-unum *env* :sign '-)
+			     (open-inf-unum *env*))))
+      (jointp (%quad dom) (ubound 0))))
+  t)
+
+(deftest ch17.test-2e
+  (flet ((%quad (x)
+	   (poly
+	    (make-ubarray (vector (ubound 2) (ubound 100) (ubound 3)))
+	    x)))
+    (let* ((*env* (make-env 3 3))
+	   (dom (make-ubound (open-inf-unum *env* :sign '-)
+			     (open-inf-unum *env*))))
+      (jointp (%quad dom) (ubound 0))))
+  t)
+
+(deftest ch17.test-2f
+  (flet ((%quad (x)
+	   (poly
+	    (make-ubarray (vector (ubound 2) (ubound 100) (ubound 3)))
+	    x)))
+    (let* ((*env* (make-env 3 4)) ; [4+ 4] or [3 5+] explodes
 	   (dom (make-ubound (open-inf-unum *env* :sign '-)
 			     (open-inf-unum *env*))))
       (jointp (%quad dom) (ubound 0))))

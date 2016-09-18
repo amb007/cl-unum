@@ -610,8 +610,10 @@
 	      do (setf fs (1+ fs)
 		       r (* 2 r)))
 	   (if (= r (floor r))
-	       (let ((es (if (< af 2) (log (- 1 (log af 2)) 2) -1)))
-		 (if (and (= es (floor es)) (<= 0 es))
+	       (let ((es (if (< af 2)
+			     (ignore-errors (log (- 1 (log af 2)) 2))
+			     -1)))
+		 (if (and es (= es (floor es)) (<= 0 es))
 		     (ulp env :sign sign :e-size (1+ (floor es)) :f-size 1)
 		     (make-unum
 		      :sign sign :expo (+ sf (ash 1 (1- mes)) -1)
@@ -662,7 +664,10 @@
 
 (defmethod eqlu ((ub1 ubound) (ub2 ubound))
   (or (eq ub1 ub2)
-      (and (eqlu (lo ub1) (lo ub2)) (eqlu (hi* ub1) (hi* ub2)))))
+      (and (eqlu (lo ub1) (lo ub2))
+	   (if (null (hi ub1))
+	       (null (hi ub2))
+	       (eqlu (hi ub1) (hi ub2))))))
 
 (defvar *ubits-moved* nil)
 (defvar *unums-moved* nil)
@@ -829,7 +834,7 @@
 	     (mes (max-e-size u))
 	     (ue (inc-e-size u))
 	     (u* (copy-unum (if es-small ue u) :ubit ubit))
-	     (u+ulp (if (eql es mes) ; could not increment e-size
+	     (u+ulp (if (and es-small (eql es mes)) ; could not increment e-size
 			(copy-unum u :frac (if (eql e2 0) f2 (frac u))
 				   :f-size mfs :ubit ubit)
 			(copy-unum (if es-small ue u)
@@ -1114,8 +1119,7 @@
 	      (ur (to-rational u))
 	      (du (if (eql ur 0) u (dec-ubit (exact u)))))
 	 (if (eql ur gr)
-	     (if (and (open-p g) (eq (f-sign g) '-) (not (eql 0 (a-frac g)))
-		      (<= (to-rational du) ur))
+	     (if (and (open-p g) (eq (f-sign g) '-) (not (eql 0 (a-frac g))))
 		 du
 		 u)
 	     (if (< gr (max-rational *env* :sign '-))

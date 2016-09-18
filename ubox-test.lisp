@@ -69,6 +69,19 @@
 		  (ubound (unum 1.5))))))
   t)
 
+(deftest split.test-2
+  (let* ((*env* (make-env 1 2))
+	 (subs (split (make-ubound (open-inf-unum *env* :sign '-)
+				   (open-inf-unum *env*)))))
+    (and
+     (eql (length subs) 3)
+     (every #'eqlu subs
+	    (list (ubound (make-unum :sign '- :expo 3 :frac 14 :ubit 1))
+		  (ubound (make-unum :sign '- :expo 3 :frac 14))
+		  (make-ubound (make-unum :sign '- :expo 3 :frac 6 :ubit 1)
+			       (open-inf-unum *env*))))))
+  t)
+
 (deftest bisect.test-1
   (let ((sgbs (bisect (make-gbound (gnum 1.25) (gnum 1.5)))))
     (and
@@ -200,15 +213,26 @@
      (eqlu (cadr r) (make-ubound (lo (cadr ubs)) (hi* (caddr ubs))))))
   t)
 
-#+nil
 (deftest ch17.test-s2
   (flet ((%quad (x)
 	   (poly
 	    (make-ubarray (vector (ubound 2) (ubound 100) (ubound 3)))
 	    x)))
-    (let* ((*env* (make-env 1 2))
+    (let* ((*env* (make-env 2 5))
 	   (dom (make-ubound (open-inf-unum *env* :sign '-)
 			     (open-inf-unum *env*)))
-	   (zero (ubound 0)))
-      (solve-ulp (list dom) (lambda (x) (jointp (%quad x) zero)))))
+	   (zero (ubound 0))
+	   (s (solve-ulp (list dom) (lambda (x) (jointp (%quad x) zero)))))
+      (and (eql 2 (length s))
+	   (every
+	    #'eqlu s
+	    (list
+	     (make-ubound
+	      (make-unum :sign '- :expo 12
+			 :frac #b00001010100000011010111010011011
+			 :ubit 1 :e-size 4 :f-size 32))
+	     (make-ubound
+	      (make-unum :sign '- :expo 1
+			 :frac #b01000111111000000111100011011101
+			 :ubit 1 :e-size 4 :f-size 32)))))))
   t)
