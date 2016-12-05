@@ -252,11 +252,11 @@
 	     :frac (byte-mask (max-f-size env) -2) :ubit 1
 	     :e-size (max-e-size env) :f-size (max-f-size env)
 	     :ess (ess env) :fss (fss env)))
-(defun walpirip (env)
+(defun warlpirip (env)
   (and (eql (ess env) 0) (eql (fss env) 0)))
 (defmethod open-inf-unum ((env env) &key (sign '+))
   (assert (member sign '(+ -)))
-  (if (walpirip env)
+  (if (warlpirip env)
       (make-unum :sign sign :expo 1 :ubit 1 :e-size 1 :f-size 1 :ess 0 :fss 0)
       (make-unum :sign sign :expo 1 :frac 1 :ubit 1 :e-size 1 :f-size 1
 		 :ess (ess env) :fss (fss env))))
@@ -1029,7 +1029,7 @@
     (t (let* ((r (to-rational g))
 	      (u (unum r :env env))
 	      (ubit (signum (+ (ubit u) (to-signum (open-p g))))))
-	 (if (or (eql (ubit u) ubit) (walpirip env))
+	 (if (or (eql (ubit u) ubit) (warlpirip env))
 	     u
 	     (copy-unum u :ubit ubit))))))
 
