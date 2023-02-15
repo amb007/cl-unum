@@ -4,7 +4,7 @@
 ;;; 
 
 (push #P"../systems/" asdf:*central-registry*)
-(declaim (optimize (debug 3) (safety 3) (speed 0) (space 0)
+(declaim (optimize (debug 3) (safety 0) (speed 3) (space 0)
 		   (compilation-speed 0)))
 (funcall
  (sb-alien:define-alien-routine
