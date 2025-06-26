@@ -2,7 +2,7 @@
 
 A Common Lisp implementation of [John L. Gustafson](https://en.wikipedia.org/wiki/John_Gustafson_(scientist))'s [unum](https://en.wikipedia.org/wiki/Unum_(number_format))s as described in [The End of Error](https://www.crcpress.com/The-End-of-Error-Unum-Computing/Gustafson/p/book/9781482239867).
 
-[DeepWiki documentation](https://deepwiki.com/amb007/cl-unum)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/amb007/cl-unum)
 
 Initial goals are to
 
